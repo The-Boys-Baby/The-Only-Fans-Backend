@@ -1,6 +1,6 @@
 const client = require("./seed")
-const { createUser, getUserById, getUserByUsername } = require("./users")
-const { createProduct, getProductById,getProductByName,updateProduct  } = require("./products")
+const { createUser, getUserById, getUserByUsername, updateUser,deleteUser } = require("./users")
+const { createProduct, getProductById,getProductByName,updateProduct, deleteProduct  } = require("./products")
 
 
 async function dropTables(){
@@ -25,7 +25,7 @@ async function createTables(){
         firstname VARCHAR(255) NOT NULL,
         lastname VARCHAR(255) NOT NULL,
         email VARCHAR(255) NOT NULL,
-        active BOOLEAN DEFAULT(TRUE));
+        isactive BOOLEAN DEFAULT(TRUE));
         
         CREATE TABLE product(
         productid SERIAL PRIMARY KEY,
@@ -103,6 +103,9 @@ async function TB (){
     await getProductById(2)
     await getProductByName("firstProduct")
     await updateProduct(1, {name: "cheese", description: "owuga"})
+    await updateUser(1, {username: "cheezyboi", email: "crapface@icloud.com"})
+    await deleteProduct(2)
+    await deleteUser(1)
     client.end()
 }
 

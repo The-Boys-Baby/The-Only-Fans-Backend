@@ -37,6 +37,19 @@ async function getProductByName(name){
         console.log(error)
     }
 }
+async function deleteProduct(id){
+    try {
+        const getit = await getProductById(id)
+        // console.log(getit)
+        const { rows: [deleteProduct]} = await client.query(`
+        UPDATE product
+        SET "isactive" = $1
+        WHERE "productid" = ${id};
+        `, [!getit.isactive])
+    } catch (error) {
+        console.log(error)
+    }
+}
 
 async function updateProduct(id, fields = {}){
         const keys = Object.keys(fields)
@@ -55,8 +68,7 @@ async function updateProduct(id, fields = {}){
         WHERE "productid" = ${id}
         RETURNING *;`,
         values)
-        console.log(!!rowCount)
-        return !!rowCount
+        // console.log(!!rowCount)
     } catch (error) {
         console.log(error)
     }
@@ -64,4 +76,4 @@ async function updateProduct(id, fields = {}){
 
 
 
-module.exports = { createProduct, getProductById, getProductByName,updateProduct }
+module.exports = { createProduct, getProductById, getProductByName,updateProduct,deleteProduct }

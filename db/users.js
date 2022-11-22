@@ -11,7 +11,7 @@ async function createUser({username, password, firstname, lastname, email}){
         RETURNING id, username;
         `, [username, password,firstname,lastname,email]
         )
-        console.log(user)
+        // console.log(user)
         return user
     } catch (error) {
         console.log(error)
@@ -25,7 +25,7 @@ async function getUserById(id){
         FROM users
         WHERE "id" = $1;`
         ,[id])
-        console.log(user)
+        // console.log(user)
         return user
     } catch (error) {
         console.log(error)
@@ -61,7 +61,7 @@ async function updateUser(id, fields ={} ) {
       const { rows: [ user ] } = await client.query(`
         UPDATE users
         SET ${ setString }
-        WHERE id=${ id }
+        WHERE "id"=${ id }
         RETURNING *;
       `, values);
   
@@ -70,8 +70,24 @@ async function updateUser(id, fields ={} ) {
       throw error;
     }
   }
+  async function deleteUser(id){
+    try {
+        const { rows: [cheese]}= await client.query(`
+        SELECT isactive
+        FROM users
+        WHERE "id" = $1;`
+        ,[id])
 
+        const { rows: [deleteProduct]} = await client.query(`
+        UPDATE users
+        SET "isactive" = $1
+        WHERE "id" = ${id};
+        `, [!cheese.isactive])
+    } catch (error) {
+        console.log(error)
+    }
+}
 
     
 
-module.exports = {createUser, getUserById,getUserByUsername}
+module.exports = {createUser, getUserById,getUserByUsername, updateUser,deleteUser}
