@@ -8,6 +8,8 @@ async function createUser({username, password, firstname, lastname, email}){
         RETURNING id, username;
         `, [username, password,firstname,lastname,email]
         )
+        // RETURNING *
+        // delete user.password
         // console.log(user)
         return user
     } catch (error) {
@@ -61,7 +63,7 @@ async function updateUser(id, fields ={} ) {
         WHERE "id"=${ id }
         RETURNING *;
       `, values);
-  
+        //look at similar function in products
       return user;
     } catch (error) {
       throw error;
@@ -79,7 +81,7 @@ async function updateUser(id, fields ={} ) {
         UPDATE users
         SET "isactive" = $1
         WHERE "id" = ${id};
-        `, [!cheese.isactive])
+        `, [!cheese.isactive]) //interpolate id as $2
     } catch (error) {
         console.log(error)
     }

@@ -1,6 +1,6 @@
 const client = require("./seed")
 
-async function getAllProducts(){
+async function getAllProducts(){ // get all products no matter the status
     try {
         const {rows} = await client.query(`
         SELECT * FROM product
@@ -11,6 +11,9 @@ async function getAllProducts(){
         console.log(error)
     }
 }
+//separate function for active products
+//separate function for inactive products
+
 async function createProduct({name, price, description}){
     try{
         const {rows: [product]} = await client.query(`
@@ -75,9 +78,10 @@ async function updateProduct(id, fields = {}){
         const { rowCount } = await client.query(`
         UPDATE product
         SET ${colums}
-        WHERE "productid" = ${id}
+        WHERE "productid" = ${keys.length + 1}
         RETURNING *;`,
-        values)
+        [...values, id])
+        // interpolate id here
         // console.log(!!rowCount)
     } catch (error) {
         console.log(error)

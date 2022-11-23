@@ -1,23 +1,29 @@
-const client = require("./seed")
-const { createUser, getUserById, getUserByUsername, updateUser,deleteUser } = require("./users")
-const { createProduct, getProductById,getProductByName,updateProduct, deleteProduct,getAllProducts  } = require("./products")
+const client = require('./seed') //switch this file with seed.
+const { createUser, getUserById, getUserByUsername, updateUser, deleteUser } = require('./users')
+const {
+	createProduct,
+	getProductById,
+	getProductByName,
+	updateProduct,
+	deleteProduct,
+	getAllProducts,
+} = require('./products')
 
-
-async function dropTables(){
-        try{
-            await client.query(`
+async function dropTables() {
+	try {
+		await client.query(`
             DROP TABLE IF EXISTS completeorder;
             DROP TABLE IF EXISTS cart;
             DROP TABLE IF EXISTS product;
             DROP TABLE IF EXISTS users;`)
-        }catch(error){
-            console.log(error)
-        }
+	} catch (error) {
+		console.log(error)
+	}
 }
 
-async function createTables(){
-    try {
-        await client.query(`
+async function createTables() {
+	try {
+		await client.query(`
         CREATE TABLE users(
         id SERIAL PRIMARY KEY,
         username VARCHAR(255) UNIQUE NOT NULL,
@@ -50,61 +56,67 @@ async function createTables(){
         UNIQUE (orderid, productid)
         );
         `)
-    } catch (error) {
-        console.log(error)
-    }
+		// completeorder > orderItem
+		// cart > order
+		// for every primary key, name it "id"
+	} catch (error) {
+		console.log(error)
+	}
 }
-async function createUsersForData(){
-    await createUser({
-        username: "cheesy"
-        , password: "cheese"
-        , firstname: "cheese"
-        , lastname: "johnson"
-        , email: "swisscheeze@email.com"
-    })
-    await createUser({
-        username: "dsfdsfg"
-        , password: "dsgsdgdsg"
-        , firstname: "csdgsdgdsg"
-        , lastname: "jamestone"
-        , email: "dsfdsfgjameston@email.com"
-    })
-    await createUser({
-        username: "Kenny"
-        , password: "Benny"
-        , firstname: "Keenny"
-        , lastname: "myGirlfriendGotUpperCutByASpecialNeedsKenderGartner"
-        , email: "Kenny@email.com"
-    })
+async function createUsersForData() {
+	await createUser({
+		username: 'cheesy',
+		password: 'cheese',
+		firstname: 'cheese',
+		lastname: 'johnson',
+		email: 'swisscheeze@email.com',
+	})
+	await createUser({
+		username: 'dsfdsfg',
+		password: 'dsgsdgdsg',
+		firstname: 'csdgsdgdsg',
+		lastname: 'jamestone',
+		email: 'dsfdsfgjameston@email.com',
+	})
+	await createUser({
+		username: 'Kenny',
+		password: 'Benny',
+		firstname: 'Keenny',
+		lastname: 'myGirlfriendGotUpperCutByASpecialNeedsKenderGartner',
+		email: 'Kenny@email.com',
+	})
 }
-async function createTestProducts (){
-    await createProduct({
-        name: "firstProduct",
-        price: 10,
-        description: "The First Product"})
-    await createProduct({
-        name: "SecondProduct",
-        price: 15,
-        description: "The Second Product"})
-    await createProduct({
-        name: "ThirdProduct",
-        price: 35,
-        description: "The Second Product"})
+async function createTestProducts() {
+	await createProduct({
+		name: 'firstProduct',
+		price: 10,
+		description: 'The First Product',
+	})
+	await createProduct({
+		name: 'SecondProduct',
+		price: 15,
+		description: 'The Second Product',
+	})
+	await createProduct({
+		name: 'ThirdProduct',
+		price: 35,
+		description: 'The Second Product',
+	})
 }
 
-async function TB (){
-    client.connect()
-    await dropTables()
-    await createTables()
-    await createUsersForData()
-    await getUserByUsername("Kenny")
-    await createTestProducts()
-    await updateProduct(1, {name: "cheese", description: "owuga"})
-    await updateUser(1, {username: "cheezyboi", email: "crapface@icloud.com"})
-    await deleteProduct(2)
-    await deleteUser(1)
-    await getAllProducts()
-    client.end()
+async function TB() {
+	client.connect()
+	await dropTables()
+	await createTables()
+	await createUsersForData()
+	await getUserByUsername('Kenny')
+	await createTestProducts()
+	await updateProduct(1, { name: 'cheese', description: 'owuga' })
+	await updateUser(1, { username: 'cheezyboi', email: 'crapface@icloud.com' })
+	await deleteProduct(2)
+	await deleteUser(1)
+	await getAllProducts()
+	client.end()
 }
 
 TB()

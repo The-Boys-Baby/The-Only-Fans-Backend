@@ -46,7 +46,9 @@ productRouter.post("/:post", async (req, res, next)=>{
     } catch (error) {
         console.log(error)
     }
-}) 
+})
+
+//productRouter.delete('path', callback)
 
 
 module.exports = productRouter
