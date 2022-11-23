@@ -1,6 +1,16 @@
 const client = require("./seed")
 
-
+async function getAllProducts(){
+    try {
+        const {rows} = await client.query(`
+        SELECT * FROM product
+        WHERE "isactive" = TRUE;`)
+        console.log(rows)
+        return rows
+    } catch (error) {
+        console.log(error)
+    }
+}
 async function createProduct({name, price, description}){
     try{
         const {rows: [product]} = await client.query(`
@@ -76,4 +86,4 @@ async function updateProduct(id, fields = {}){
 
 
 
-module.exports = { createProduct, getProductById, getProductByName,updateProduct,deleteProduct }
+module.exports = { getAllProducts,createProduct, getProductById, getProductByName,updateProduct,deleteProduct }

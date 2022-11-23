@@ -1,15 +1,14 @@
 const express = require("express")
-const app = express.Router()
-const morgan = require("morgan")
+const router = express.Router()
 
 
 const jwt = require("jsonwebtoken")
 const { getUserById } = require("../db/users")
 const { JWT_SECRET } = process.env
 
-app.use(morgan)
 
-app.use(async (req, res, use) => {
+
+router.use(async (req, res, next) => {
     const prefix = "Bearer "
     const auth = req.header("Authorization")
 
@@ -35,3 +34,12 @@ app.use(async (req, res, use) => {
         })
     }
 })
+
+
+const productRouter = require("./products")
+router.use("/products", productRouter)
+
+const userRouter = require("./users")
+router.use("/users", userRouter)
+
+module.exports = router
