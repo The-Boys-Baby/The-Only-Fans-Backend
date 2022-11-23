@@ -1,8 +1,5 @@
 const client = require("./seed")
 
-
-
-
 async function createUser({username, password, firstname, lastname, email}){
     try {
         const { rows: [user] } =  await client.query(`
@@ -69,7 +66,7 @@ async function updateUser(id, fields ={} ) {
     } catch (error) {
       throw error;
     }
-  }
+}
   async function deleteUser(id){
     try {
         const { rows: [cheese]}= await client.query(`
