@@ -1,6 +1,6 @@
 const client = require("./seed")
 const { createUser, getUserById, getUserByUsername, updateUser,deleteUser } = require("./users")
-const { createProduct, getProductById,getProductByName,updateProduct, deleteProduct  } = require("./products")
+const { createProduct, getProductById,getProductByName,updateProduct, deleteProduct,getAllProducts  } = require("./products")
 
 
 async function dropTables(){
@@ -106,6 +106,7 @@ async function TB (){
     await updateUser(1, {username: "cheezyboi", email: "crapface@icloud.com"})
     await deleteProduct(2)
     await deleteUser(1)
+    await getAllProducts()
     client.end()
 }
 

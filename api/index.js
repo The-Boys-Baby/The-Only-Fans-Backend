@@ -35,3 +35,7 @@ app.use(async (req, res, use) => {
         })
     }
 })
+
+
+const productRouter = require("./products")
+app.use("/products", productRouter)
