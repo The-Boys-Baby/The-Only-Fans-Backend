@@ -5,7 +5,7 @@ async function getAllProducts(){
         const {rows} = await client.query(`
         SELECT * FROM product
         WHERE "isactive" = TRUE;`)
-        console.log(rows)
+        // console.log(rows)
         return rows
     } catch (error) {
         console.log(error)
@@ -28,7 +28,7 @@ async function getProductById(id){
         const {rows: [product]} = await client.query(`
         SELECT *
         FROM product
-        WHERE "productid" = $1;`,[id])
+        WHERE "id" = $1;`,[id])
         // console.log(product)
         return product
     } catch (error) {
@@ -54,7 +54,7 @@ async function deleteProduct(id){
         const { rows: [deleteProduct]} = await client.query(`
         UPDATE product
         SET "isactive" = $1
-        WHERE "productid" = ${id};
+        WHERE "id" = ${id};
         `, [!getit.isactive])
     } catch (error) {
         console.log(error)
@@ -74,7 +74,7 @@ async function updateProduct(id, fields = {}){
         const { rowCount } = await client.query(`
         UPDATE product
         SET ${colums}
-        WHERE "productid" = ${id}
+        WHERE "id" = ${id}
         RETURNING *;`,
         values)
         // console.log(!!rowCount)

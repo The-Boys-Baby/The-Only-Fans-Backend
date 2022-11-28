@@ -1,15 +1,17 @@
 const client = require("./seed")
 const { createUser, getUserById, getUserByUsername, updateUser,deleteUser } = require("./users")
 const { createProduct, getProductById,getProductByName,updateProduct, deleteProduct,getAllProducts  } = require("./products")
-
+const {getAllOrders,getActiveOrders,getActiveOrdersByCustomerId,getAllOrdersByCustomerId,getOrderByOrderId,createOrder} = require("./order")
 
 async function dropTables(){
         try{
+
             await client.query(`
-            DROP TABLE IF EXISTS completeorder;
-            DROP TABLE IF EXISTS cart;
+            DROP TABLE IF EXISTS orderitem;
+            DROP TABLE IF EXISTS "order";
             DROP TABLE IF EXISTS product;
             DROP TABLE IF EXISTS users;`)
+
         }catch(error){
             console.log(error)
         }
@@ -28,24 +30,24 @@ async function createTables(){
         isactive BOOLEAN DEFAULT(TRUE));
         
         CREATE TABLE product(
-        productid SERIAL PRIMARY KEY,
+        id SERIAL PRIMARY KEY,
         name VARCHAR(255) UNIQUE NOT NULL,
         price INTEGER NOT NULL,
         description VARCHAR(500) NOT NULL,
         isActive BOOLEAN DEFAULT(TRUE)
         );
 
-        CREATE TABLE cart(
-        cartid SERIAL PRIMARY KEY,
+        CREATE TABLE "order"(
+        id SERIAL PRIMARY KEY,
         customerid INTEGER REFERENCES users(id),
-        totalamount MONEY NOT NULL,
+        totalamount MONEY NOT NULL DEFAULT(0),
         Orderstatus BOOLEAN DEFAULT(false)
         );
 
-        CREATE TABLE completeorder(
-        orderlineid SERIAL PRIMARY KEY,
-        orderid INTEGER REFERENCES cart(cartid),
-        productid INTEGER REFERENCES product(productid),
+        CREATE TABLE orderitem(
+        id SERIAL PRIMARY KEY,
+        orderid INTEGER REFERENCES "order"(id),
+        productid INTEGER REFERENCES product(id),
         quantity INTEGER NOT NULL,
         UNIQUE (orderid, productid)
         );
@@ -97,13 +99,25 @@ async function TB (){
     await dropTables()
     await createTables()
     await createUsersForData()
+    await getUserById(1)
     await getUserByUsername("Kenny")
     await createTestProducts()
+    await getProductById(2)
+    await getProductByName("firstProduct")
     await updateProduct(1, {name: "cheese", description: "owuga"})
     await updateUser(1, {username: "cheezyboi", email: "crapface@icloud.com"})
     await deleteProduct(2)
     await deleteUser(1)
     await getAllProducts()
+    await createOrder(1)
+    await createOrder(1,true)
+    await createOrder(2,true)
+    await createOrder(3)
+    // await getAllOrders()
+    // await getActiveOrders()
+    await getActiveOrdersByCustomerId({id: 1})
+    await getAllOrdersByCustomerId({id: 1})
+    await getOrderByOrderId(1)
     client.end()
 }
 
