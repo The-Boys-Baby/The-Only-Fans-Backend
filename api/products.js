@@ -1,6 +1,6 @@
 const express = require("express")
 const productRouter = express.Router()
-const { getAllProducts, createProduct } = require("../db/products")
+const { getAllProducts, createProduct, updateProduct } = require("../db/products")
 
 productRouter.get("/", async (req,res,next) => {
     try {
@@ -31,9 +31,24 @@ productRouter.post("/", async (req, res, next)=>{
     }
 }) 
 productRouter.post("/:post", async (req, res, next)=>{
-    const {name, price, description} = req.body
+    
+    const id = req.params.post
+    const fields = {}
+    if(req.body.name){
+        fields.name = req.body.name
+
+    }
+    if(req.body.price){
+        fields.price = req.body.price
+
+    }
+    if(req.body.description){
+        fields.description = req.body.description
+
+    }
+
     try {
-        const post = await createProduct ({name, price, description})
+        const post = await updateProduct (id, fields)
 
         if (post){
             res.send(post)
