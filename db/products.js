@@ -64,12 +64,11 @@ async function deleteProduct(id){
 async function updateProduct(id, fields = {}){
         const keys = Object.keys(fields)
         const values = Object.values(fields)
-
         if (keys.length === 0){
             return
         }
 
-        const colums = keys.map((el, index) => `${el} = $${index + 1}` ).join(", ")
+        const colums = keys.map((el, index) => `"${el}" = $${index + 1}` ).join(", ")
 
     try {
         const { rowCount } = await client.query(`
