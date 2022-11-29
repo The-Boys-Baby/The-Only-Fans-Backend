@@ -1,6 +1,6 @@
 const client = require("./seed")
 
-async function getAllProducts(){ // get all products no matter the status
+async function getAllProducts(){
     try {
         const {rows} = await client.query(`
         SELECT * FROM product
@@ -11,8 +11,9 @@ async function getAllProducts(){ // get all products no matter the status
         console.log(error)
     }
 }
-//separate function for active products
-//separate function for inactive products
+
+// jeremy: separate function for inactive products.
+// jeremy: separate function for ALL products, regardless of activity.
 
 async function createProduct({name, price, description}){
     try{
@@ -58,7 +59,7 @@ async function deleteProduct(id){
         UPDATE product
         SET "isactive" = $1
         WHERE "productid" = ${id};
-        `, [!getit.isactive])
+        `, [!getit.isactive]) // jeremy: interpolate id here, $2 and [isactive, id]
     } catch (error) {
         console.log(error)
     }
@@ -81,8 +82,9 @@ async function updateProduct(id, fields = {}){
         WHERE "productid" = ${keys.length + 1}
         RETURNING *;`,
         [...values, id])
-        // interpolate id here
-        // console.log(!!rowCount)
+        //  jeremy: getting rowCount but not using it
+        // opportunity to return the count, the row, check if it was more than 1, etc. and return something.
+        // can also get { rows } and get the count from the rows.length, etc.
     } catch (error) {
         console.log(error)
     }

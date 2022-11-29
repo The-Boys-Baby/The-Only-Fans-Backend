@@ -22,7 +22,7 @@ userRouter.post("/register", async (req, res, next) => {
             });
         }
 
-        const user = await createUser({
+        const user = await createUser({ // can create an object with all these things in it on line 13, so you don't need to ennumerate them twice
             username,
             password,
             firstname,
@@ -30,14 +30,13 @@ userRouter.post("/register", async (req, res, next) => {
             email
         });
 
-        const token = jwt.sign({id: user.id, username: user.username}, process.env.JWT_SECRET, {expiresIn: "1w"})
+        const token = jwt.sign({id: user.id, username: user.username}, process.env.JWT_SECRET, {expiresIn: "1w"}) // jeremy: could make token the result of a function that has those things in it. Takes user it and username. can put it in a utility file for API, You'll need a few functions in a utility file to use as middleware anyway. reduces the imports at the top and therefore complexity of your app.
 
         res.send({
             user,
             message: `Successfully created Username and password thank you for signing up ${username}`,
             token
         });
-
 
 
 

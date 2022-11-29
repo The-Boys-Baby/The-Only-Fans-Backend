@@ -63,7 +63,7 @@ async function updateUser(id, fields ={} ) {
         WHERE "id"=${ id }
         RETURNING *;
       `, values);
-        //look at similar function in products
+        // jeremy: look at similar function in products
       return user;
     } catch (error) {
       throw error;
@@ -81,7 +81,7 @@ async function updateUser(id, fields ={} ) {
         UPDATE users
         SET "isactive" = $1
         WHERE "id" = ${id};
-        `, [!cheese.isactive]) //interpolate id as $2
+        `, [!cheese.isactive]) // jeremy: interpolate id as $2
     } catch (error) {
         console.log(error)
     }

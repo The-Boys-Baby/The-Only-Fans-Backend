@@ -1,4 +1,4 @@
-const client = require('./seed') //switch this file with seed.
+const client = require('./seed') // jeremy: switch this file with seed. also don't forget to do it in package.json as well :)
 const { createUser, getUserById, getUserByUsername, updateUser, deleteUser } = require('./users')
 const {
 	createProduct,
@@ -56,7 +56,7 @@ async function createTables() {
         UNIQUE (orderid, productid)
         );
         `)
-		// completeorder > orderItem
+		// jeremy: completeorder > orderItem
 		// cart > order
 		// for every primary key, name it "id"
 	} catch (error) {

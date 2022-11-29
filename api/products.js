@@ -13,7 +13,7 @@ productRouter.get("/", async (req,res,next) => {
     }
 })
 
-productRouter.post("/", async (req, res, next)=>{
+productRouter.post("/", async (req, res, next)=>{ // jeremy: needs admin protection
     const {name, price, description} = req.body
     try {
         const post = await createProduct ({name, price, description})
@@ -30,7 +30,7 @@ productRouter.post("/", async (req, res, next)=>{
         console.log(error)
     }
 }) 
-productRouter.post("/:post", async (req, res, next)=>{
+productRouter.post("/:post", async (req, res, next)=>{ // jeremy: what is :post? :productId?
     const {name, price, description} = req.body
     try {
         const post = await createProduct ({name, price, description})
@@ -48,7 +48,7 @@ productRouter.post("/:post", async (req, res, next)=>{
     }
 })
 
-//productRouter.delete('path', callback)
+// jeremy: productRouter.delete('path', callback)
 
 
 module.exports = productRouter
