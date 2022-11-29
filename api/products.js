@@ -30,6 +30,7 @@ productRouter.post("/", async (req, res, next)=>{
         console.log(error)
     }
 }) 
+
 productRouter.post("/:post", async (req, res, next)=>{
     
     const id = req.params.post
