@@ -2,6 +2,7 @@ const client = require("./seed")
 const { createUser, getUserById, getUserByUsername, updateUser,deleteUser } = require("./users")
 const { createProduct, getProductById,getProductByName,updateProduct, deleteProduct,getAllProducts  } = require("./products")
 const {getAllOrders,getActiveOrders,getActiveOrdersByCustomerId,getAllOrdersByCustomerId,getOrderByOrderId,createOrder} = require("./order")
+const { createOrderItem, getOrderByOrderNumber }= require("./orderitem")
 
 async function dropTables(){
         try{
@@ -48,8 +49,7 @@ async function createTables(){
         id SERIAL PRIMARY KEY,
         orderid INTEGER REFERENCES "order"(id),
         productid INTEGER REFERENCES product(id),
-        quantity INTEGER NOT NULL,
-        UNIQUE (orderid, productid)
+        quantity INTEGER NOT NULL
         );
         `)
     } catch (error) {
@@ -118,6 +118,13 @@ async function TB (){
     await getActiveOrdersByCustomerId({id: 1})
     await getAllOrdersByCustomerId({id: 1})
     await getOrderByOrderId(1)
+    await createOrderItem({orderId: 1, productId: 1, quantity: 4})
+    await createOrderItem({orderId: 1, productId: 2, quantity: 2})
+    await createOrderItem({orderId: 2, productId: 3, quantity: 3})
+    await createOrderItem({orderId: 2, productId: 2, quantity: 3})
+    await createOrderItem({orderId: 2, productId: 2, quantity: 8})
+    await createOrderItem({orderId: 2, productId: 2, quantity: 2})
+    await getOrderByOrderNumber({id:2})
     client.end()
 }
 
