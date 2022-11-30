@@ -35,11 +35,12 @@ async function getActiveOrders(){
     }
 }
 async function getActiveOrdersByCustomerId({id}){
+        // console.log(id)
     try {
         const { rows: [activeOrder] } = await client.query(`
         SELECT * FROM "order"
         WHERE "orderstatus" = false AND "customerid" = $1;`,[id])
-        console.log(activeOrder)
+        // console.log(activeOrder)
         return activeOrder
     } catch (error) {
         console.log(error)
@@ -50,24 +51,31 @@ async function getAllOrdersByCustomerId({id}){
         const { rows } = await client.query(`
         SELECT * FROM "order"
         WHERE "customerid" = $1;`,[id])
-        console.log(rows)
+        // console.log(rows)
         return rows
     } catch (error) {
         console.log(error)
     }
 }
-async function getOrderByOrderId(id){
-    try {
-        const { rows } = await client.query(`
-        SELECT * FROM "order"
-        WHERE "id" = $1;`,[id])
-        console.log(rows)
-        return rows
-    } catch (error) {
-        console.log(error)
-    }
-}
+// async function getOrderByOrderId(id){
+//     try {
+//         const chow = await client.query(`
+//         SELECT "orderitem".*, "product".name, "product".price 
+//         FROM "product"
+//         INNER JOIN "orderitem" ON "product".id= "orderitem".productid;
+//         `
+//         // ,[id]
+//         )
+//         // WHERE "id" = $1;
+//         console.log("this is rows:", chow)
+
+//         return 
+//     } catch (error) {
+//         console.log(error)
+//     }
+// }
 
 
 
-module.exports = {getAllOrders,getActiveOrders,getActiveOrdersByCustomerId,getAllOrdersByCustomerId,getOrderByOrderId,createOrder}
+
+module.exports = {getAllOrders,getActiveOrders,getActiveOrdersByCustomerId,getAllOrdersByCustomerId,createOrder} //add getOrderByOrderId,

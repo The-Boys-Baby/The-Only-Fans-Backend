@@ -1,4 +1,5 @@
 const client = require("./seed")
+const { getActiveOrdersByCustomerId} = require("./order")
 
 
 async function createOrderItem({orderId,productId,quantity}){
@@ -19,10 +20,26 @@ async function getOrderByOrderNumber({id}){
         const { rows } = await client.query(`
         SELECT * FROM orderitem
         WHERE "orderid" = $1`, [id])
-        console.log(rows)
+        // console.log(rows)
+        return rows
     } catch (error) {
         console.log(error)
     }
 }
 
-module.exports = { createOrderItem, getOrderByOrderNumber }
+async function attachObjectsToOrder(id){
+    try{
+        const customerOrder = await getActiveOrdersByCustomerId({id:id})
+        // console.log(customerOrder.id)
+        customerOrder.items = await getOrderByOrderNumber({id: customerOrder.id})
+        if (customerOrder.items){
+            return customerOrder
+        }else{
+            return {name: "NoItemsInCart", message: "there is not item in your cart"}
+        }
+    }catch(error){
+        console.log(error)
+    }
+}
+
+module.exports = { createOrderItem, getOrderByOrderNumber, attachObjectsToOrder,attachObjectsToOrder }
