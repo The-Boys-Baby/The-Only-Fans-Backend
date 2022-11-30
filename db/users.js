@@ -1,12 +1,14 @@
 const client = require("./seed")
+const bcrypt = require("bcrypt")
 
 async function createUser({username, password, firstname, lastname, email}){
+    const hashedpassword = await bcrypt.hash(password, 10)
     try {
         const { rows: [user] } =  await client.query(`
         INSERT INTO USERS(username, password, firstname, lastname, email)
         VALUES ($1, $2, $3, $4, $5)
         RETURNING id, username;
-        `, [username, password,firstname,lastname,email]
+        `, [username, hashedpassword,firstname,lastname,email]
         )
         // console.log(user)
         return user
@@ -32,7 +34,7 @@ async function getUserById(id){
 async function getUserByUsername(username){
     try {
         const {rows: [user]} = await client.query(`
-        SELECT id, username
+        SELECT id, username, password
         FROM users
         WHERE "username" = $1;`,[username])
         return user
