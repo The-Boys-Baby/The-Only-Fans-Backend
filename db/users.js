@@ -1,5 +1,9 @@
 const client = require("./seed")
+<<<<<<< HEAD
+const bcrypt = require('bcrypt')
+=======
 const bcrypt = require("bcrypt")
+>>>>>>> main
 
 async function createUser({username, password, firstname, lastname, email}){
     const hashedpassword = await bcrypt.hash(password, 10)
@@ -86,6 +90,7 @@ async function updateUser(id, fields ={} ) {
         console.log(error)
     }
 }
+
 
     
 

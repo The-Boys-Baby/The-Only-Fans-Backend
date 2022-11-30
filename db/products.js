@@ -1,3 +1,4 @@
+const productRouter = require("../api/products")
 const client = require("./seed")
 
 async function getAllProducts(){
@@ -50,14 +51,20 @@ async function getProductByName(name){
 async function deleteProduct(id){
     try {
         const getit = await getProductById(id)
-        // console.log(getit)
-        const { rows: [deleteProduct]} = await client.query(`
+        console.log(getit)
+        const {rowCount}= await client.query(`
         UPDATE product
         SET "isactive" = $1
         WHERE "id" = ${id};
         `, [!getit.isactive])
+        if(rowCount){
+           return !!rowCount
+        } else{
+            return false
+        }
+        
     } catch (error) {
-        console.log(error)
+        return error
     }
 }
 
@@ -82,6 +89,7 @@ async function updateProduct(id, fields = {}){
         console.log(error)
     }
 }
+
 
 
 
