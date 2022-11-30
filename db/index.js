@@ -86,7 +86,7 @@ async function createTestProducts (){
         name: "firstProduct",
         price: 10,
         description: "The First Product",
-        filePath: "./photos/firstProduct"})
+        filePath: "https://images.costco-static.com/ImageDelivery/imageService?profileId=12026540&imageId=1493135-847__1&recipeName=350"})
     await createProduct({
         name: "SecondProduct",
         price: 15,
