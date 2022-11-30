@@ -35,7 +35,8 @@ async function createTables(){
         name VARCHAR(255) UNIQUE NOT NULL,
         price INTEGER NOT NULL,
         description VARCHAR(500) NOT NULL,
-        isActive BOOLEAN DEFAULT(TRUE)
+        isActive BOOLEAN DEFAULT(TRUE),
+        pictures TEXT UNIQUE NOT NULL
         );
 
         CREATE TABLE "order"(
@@ -83,15 +84,18 @@ async function createTestProducts (){
     await createProduct({
         name: "firstProduct",
         price: 10,
-        description: "The First Product"})
+        description: "The First Product",
+        filePath: "./photos/firstProduct"})
     await createProduct({
         name: "SecondProduct",
         price: 15,
-        description: "The Second Product"})
+        description: "The Second Product",
+        filePath: "./photos/SecondProduct"})
     await createProduct({
         name: "ThirdProduct",
         price: 35,
-        description: "The Second Product"})
+        description: "The Second Product",
+        filePath: "./photos/ThirdProduct"})
 }
 
 async function TB (){
