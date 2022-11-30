@@ -47,7 +47,7 @@ userRouter.post("/login", async (req,res, next) => {
     const {username,password} = req.body 
    
     if (!username, !password){
-        next({  name: "MissingCredentials",
+        res.send({  name: "MissingCredentials",
                 message: "Please put in username and password"})
     }
 
@@ -65,7 +65,7 @@ userRouter.post("/login", async (req,res, next) => {
         res.send({message: `thank you for logging in ${username}`, token: token})
 
     }else{
-        next({name: "INVALIDUSERCREDENTIALS", 
+        res.send({name: "INVALIDUSERCREDENTIALS", 
         message: "Invalid Username or password"})
     }
     }catch(error){
