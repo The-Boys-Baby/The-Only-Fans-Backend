@@ -35,7 +35,8 @@ async function createTables(){
         name VARCHAR(255) UNIQUE NOT NULL,
         price INTEGER NOT NULL,
         description VARCHAR(500) NOT NULL,
-        isActive BOOLEAN DEFAULT(TRUE)
+        isActive BOOLEAN DEFAULT(TRUE),
+        pictures TEXT UNIQUE NOT NULL
         );
 
         CREATE TABLE "order"(
@@ -49,6 +50,7 @@ async function createTables(){
         id SERIAL PRIMARY KEY,
         orderid INTEGER REFERENCES "order"(id),
         productid INTEGER REFERENCES product(id),
+        orderprice MONEY DEFAULT(0),
         quantity INTEGER NOT NULL
         );
         `)
@@ -83,15 +85,18 @@ async function createTestProducts (){
     await createProduct({
         name: "firstProduct",
         price: 10,
-        description: "The First Product"})
+        description: "The First Product",
+        filePath: "./photos/firstProduct"})
     await createProduct({
         name: "SecondProduct",
         price: 15,
-        description: "The Second Product"})
+        description: "The Second Product",
+        filePath: "./photos/SecondProduct"})
     await createProduct({
         name: "ThirdProduct",
         price: 35,
-        description: "The Second Product"})
+        description: "The Second Product",
+        filePath: "./photos/ThirdProduct"})
 }
 
 async function TB (){
@@ -118,12 +123,12 @@ async function TB (){
     await getActiveOrdersByCustomerId({id: 1})
     await getAllOrdersByCustomerId({id: 1})
     // await getOrderByOrderId(1)
-    await createOrderItem({orderId: 1, productId: 1, quantity: 4})
-    await createOrderItem({orderId: 1, productId: 2, quantity: 2})
-    await createOrderItem({orderId: 2, productId: 3, quantity: 3})
-    await createOrderItem({orderId: 2, productId: 3, quantity: 3})
-    await createOrderItem({orderId: 3, productId: 3, quantity: 8})
-    await createOrderItem({orderId: 3, productId: 3, quantity: 2})
+    await createOrderItem({orderId: 1, productId: 1, quantity: 4, price: 15})
+    await createOrderItem({orderId: 1, productId: 2, quantity: 2, price: 12})
+    await createOrderItem({orderId: 2, productId: 3, quantity: 3, price: 15})
+    await createOrderItem({orderId: 2, productId: 3, quantity: 3, price: 4})
+    await createOrderItem({orderId: 3, productId: 3, quantity: 8, price: 1})
+    await createOrderItem({orderId: 3, productId: 3, quantity: 2, price: 1000000000})
     await getOrderByOrderNumber({id:2})
     console.log(await attachObjectsToOrder(2))
     client.end()
