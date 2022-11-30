@@ -50,6 +50,7 @@ async function createTables(){
         id SERIAL PRIMARY KEY,
         orderid INTEGER REFERENCES "order"(id),
         productid INTEGER REFERENCES product(id),
+        orderprice MONEY DEFAULT(0),
         quantity INTEGER NOT NULL
         );
         `)
@@ -122,12 +123,12 @@ async function TB (){
     await getActiveOrdersByCustomerId({id: 1})
     await getAllOrdersByCustomerId({id: 1})
     // await getOrderByOrderId(1)
-    await createOrderItem({orderId: 1, productId: 1, quantity: 4})
-    await createOrderItem({orderId: 1, productId: 2, quantity: 2})
-    await createOrderItem({orderId: 2, productId: 3, quantity: 3})
-    await createOrderItem({orderId: 2, productId: 3, quantity: 3})
-    await createOrderItem({orderId: 3, productId: 3, quantity: 8})
-    await createOrderItem({orderId: 3, productId: 3, quantity: 2})
+    await createOrderItem({orderId: 1, productId: 1, quantity: 4, price: 15})
+    await createOrderItem({orderId: 1, productId: 2, quantity: 2, price: 12})
+    await createOrderItem({orderId: 2, productId: 3, quantity: 3, price: 15})
+    await createOrderItem({orderId: 2, productId: 3, quantity: 3, price: 4})
+    await createOrderItem({orderId: 3, productId: 3, quantity: 8, price: 1})
+    await createOrderItem({orderId: 3, productId: 3, quantity: 2, price: 1000000000})
     await getOrderByOrderNumber({id:2})
     console.log(await attachObjectsToOrder(2))
     client.end()

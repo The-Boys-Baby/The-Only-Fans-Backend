@@ -57,25 +57,19 @@ async function getAllOrdersByCustomerId({id}){
         console.log(error)
     }
 }
-// async function getOrderByOrderId(id){
-//     try {
-//         const chow = await client.query(`
-//         SELECT "orderitem".*, "product".name, "product".price 
-//         FROM "product"
-//         INNER JOIN "orderitem" ON "product".id= "orderitem".productid;
-//         `
-//         // ,[id]
-//         )
-//         // WHERE "id" = $1;
-//         console.log("this is rows:", chow)
-
-//         return 
-//     } catch (error) {
-//         console.log(error)
-//     }
-// }
+async function getOrderByOrderId(id){
+    try {
+        const { rows } = await client.query(`
+        SELECT * FROM "order"
+        WHERE "id" = $1;`,[id])
+        // console.log(rows)
+        return rows
+    } catch (error) {
+        console.log(error)
+    }
+}
 
 
 
 
-module.exports = {getAllOrders,getActiveOrders,getActiveOrdersByCustomerId,getAllOrdersByCustomerId,createOrder} //add getOrderByOrderId,
+module.exports = {getAllOrders,getActiveOrders,getActiveOrdersByCustomerId,getAllOrdersByCustomerId,getOrderByOrderId,createOrder}

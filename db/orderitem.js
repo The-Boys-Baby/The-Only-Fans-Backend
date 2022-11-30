@@ -2,13 +2,13 @@ const client = require("./seed")
 const { getActiveOrdersByCustomerId} = require("./order")
 
 
-async function createOrderItem({orderId,productId,quantity}){
+async function createOrderItem({orderId,productId,quantity,price}){
     try{
         const {rows} = await client.query(`
-        INSERT INTO orderitem(orderid,productid,quantity)
-        VALUES ($1,$2,$3)
+        INSERT INTO orderitem(orderid,productid,quantity,orderprice)
+        VALUES ($1,$2,$3,$4)
         RETURNING *;
-        `, [orderId,productId,quantity])
+        `, [orderId,productId,quantity,price])
         // console.log(rows)
     }catch(error){
         console.log(error)
@@ -35,7 +35,8 @@ async function attachObjectsToOrder(id){
         if (customerOrder.items){
             return customerOrder
         }else{
-            return {name: "NoItemsInCart", message: "there is not item in your cart"}
+            customerOrder.items = []
+            return customerOrder
         }
     }catch(error){
         console.log(error)
