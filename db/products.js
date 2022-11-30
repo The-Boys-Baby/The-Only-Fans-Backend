@@ -12,12 +12,12 @@ async function getAllProducts(){
         console.log(error)
     }
 }
-async function createProduct({name, price, description}){
+async function createProduct({name, price, description,filePath}){
     try{
         const {rows: [product]} = await client.query(`
-        INSERT INTO product(name, price, description)
-        VALUES ($1,$2,$3)
-        RETURNING *;`, [name,price,description])
+        INSERT INTO product(name, price, description, pictures)
+        VALUES ($1,$2,$3,$4)
+        RETURNING *;`, [name,price,description,filePath])
         // console.log(product)
         return product
     }catch(error){

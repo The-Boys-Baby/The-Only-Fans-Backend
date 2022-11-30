@@ -35,11 +35,12 @@ async function getActiveOrders(){
     }
 }
 async function getActiveOrdersByCustomerId({id}){
+        // console.log(id)
     try {
         const { rows: [activeOrder] } = await client.query(`
         SELECT * FROM "order"
         WHERE "orderstatus" = false AND "customerid" = $1;`,[id])
-        console.log(activeOrder)
+        // console.log(activeOrder)
         return activeOrder
     } catch (error) {
         console.log(error)
@@ -50,7 +51,7 @@ async function getAllOrdersByCustomerId({id}){
         const { rows } = await client.query(`
         SELECT * FROM "order"
         WHERE "customerid" = $1;`,[id])
-        console.log(rows)
+        // console.log(rows)
         return rows
     } catch (error) {
         console.log(error)
@@ -61,12 +62,13 @@ async function getOrderByOrderId(id){
         const { rows } = await client.query(`
         SELECT * FROM "order"
         WHERE "id" = $1;`,[id])
-        console.log(rows)
+        // console.log(rows)
         return rows
     } catch (error) {
         console.log(error)
     }
 }
+
 
 
 
