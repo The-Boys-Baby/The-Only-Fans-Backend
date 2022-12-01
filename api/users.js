@@ -2,7 +2,7 @@ const express = require("express")
 const userRouter = express.Router()
 
 const { getUserByUsername, createUser} = require("../db/users")
-
+const {createOrder} = require("../db/order")
 const bcrypt = require("bcrypt")
 const jwt = require("jsonwebtoken")
 
@@ -11,7 +11,7 @@ const jwt = require("jsonwebtoken")
 userRouter.post("/register", async (req, res, next) => {
     
     const {username, password, firstname, lastname, email} = req.body
-    console.log(username)
+    // console.log(username)
     try {
         const checkuser = await getUserByUsername(username)
 
@@ -31,7 +31,8 @@ userRouter.post("/register", async (req, res, next) => {
         });
 
         const token = jwt.sign({id: user.id, username: user.username}, process.env.JWT_SECRET, {expiresIn: "1w"})
-
+        // console.log(user.id)
+        await createOrder(user.id)
         res.send({
             user,
             message: `Successfully created Username and password thank you for signing up ${username}`,
@@ -59,9 +60,9 @@ userRouter.post("/login", async (req,res, next) => {
     const validity = await bcrypt.compare(password, hashedpassword)
     // console.log(validity)
     if(user && validity){
-        console.log("did that")
+        // console.log("did that")
         const token = jwt.sign({id: user.id, username: user.username}, process.env.JWT_SECRET, {expiresIn: "1w"})
-        console.log("token")
+        // console.log("token")
         res.send({message: `thank you for logging in ${username}`, token: token})
 
     }else{
@@ -69,7 +70,7 @@ userRouter.post("/login", async (req,res, next) => {
         message: "Invalid Username or password"})
     }
     }catch(error){
-        console.log(error)
+        // console.log(error)
         next(error)
     }
 })
