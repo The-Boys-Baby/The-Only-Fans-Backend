@@ -1,5 +1,8 @@
 const express = require("express")
 const router = express.Router()
+const productRouter = require("./products")
+const checkoutRouter = require("./checkout")
+const userRouter = require("./users")
 
 
 const jwt = require("jsonwebtoken")
@@ -38,10 +41,9 @@ router.use(async (req, res, next) => {
 })
 
 
-const productRouter = require("./products")
-router.use("/products", productRouter)
 
-const userRouter = require("./users")
+router.use("/products", productRouter)
+router.use("/checkout", checkoutRouter)
 router.use("/users", userRouter)
 
 module.exports = router
