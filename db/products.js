@@ -1,4 +1,3 @@
-const productRouter = require("../api/products")
 const client = require("./seed")
 
 async function getAllProducts(){
@@ -26,12 +25,11 @@ async function createProduct({name, price, description,filePath}){
 }
 async function getProductById(id){
     try {
-        console.log("this is id in getProductbyId", id)
         const {rows: [product]} = await client.query(`
         SELECT *
         FROM product
         WHERE "id" = $1;`,[id])
-        console.log(product)
+        // console.log(product)
         return product
     } catch (error) {
         console.log(error)

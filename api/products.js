@@ -1,7 +1,7 @@
 const express = require("express")
 const productRouter = express.Router()
 const { getAllProducts, createProduct, updateProduct,getProductById } = require("../db/products")
-const {createOrderItem} = require("../db/orderItem")
+const {createOrderItem} = require("../db/orderitem")
 const {getActiveOrdersByCustomerId}= require("../db/order")
 
 productRouter.get("/", async (req,res,next) => {
