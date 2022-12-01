@@ -1,14 +1,17 @@
 const client = require("./seed")
 const { getActiveOrdersByCustomerId} = require("./order")
+const { getProductById } = require("./products")
 
 
-async function createOrderItem({orderId,productId,quantity,price}){
+async function createOrderItem({orderId,productId,quantity}){
     try{
+        console.log(Number(productId))
+        const product = await getProductById(Number(productId))
         const {rows} = await client.query(`
         INSERT INTO orderitem(orderid,productid,quantity,orderprice)
         VALUES ($1,$2,$3,$4)
         RETURNING *;
-        `, [orderId,productId,quantity,price])
+        `, [orderId,productId,quantity,product.price])
         // console.log(rows)
     }catch(error){
         console.log(error)

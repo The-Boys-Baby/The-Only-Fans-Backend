@@ -3,8 +3,7 @@ const userRouter = express.Router()
 
 
 const { getUserByUsername, createUser} = require("../db/users")
-
-// importing bcrypt
+const {createOrder} = require("../db/order")
 const bcrypt = require("bcrypt")
 //importing jwt
 const jwt = require("jsonwebtoken")
@@ -14,12 +13,9 @@ const router = require(".")
 userRouter.post("/register", async (req, res, next) => {
     
     const {username, password, firstname, lastname, email} = req.body
-    console.log(username)
-    console.log('i am the body of this request')
+    // console.log(username)
     try {
         const checkuser = await getUserByUsername(username)
-        
-      
 
         if (checkuser) {
             next({
@@ -37,7 +33,8 @@ userRouter.post("/register", async (req, res, next) => {
         });
 
         const token = jwt.sign({id: user.id, username: user.username}, process.env.JWT_SECRET, {expiresIn: "1w"})
-
+        // console.log(user.id)
+        await createOrder(user.id)
         res.send({
             user,
             message: `Successfully created Username and password thank you for signing up ${username}`,
@@ -51,21 +48,21 @@ userRouter.post("/register", async (req, res, next) => {
 
 })
 
-// calling an async function after the create user function to hash and encrypt the password
-async function hashedPassword (password){
-    try {
-        // assigning saltValue to an await function to then generate the salt value
-        const saltValue = await bcrypt.genSalt(8)
-        console.log(`I am the salt value: ${saltValue}`)
-        // now we are hashing our salt value by passing password and saltValue as a promise 
-        const hashedValue = await bcrypt.hash(password, saltValue)
-        console.log(`I am the hashed value: `, hashedValue)
-    } catch (error) {
-        console.log(error)
-    }
-}
+// // calling an async function after the create user function to hash and encrypt the password
+// async function hashedPassword (password){
+//     try {
+//         // assigning saltValue to an await function to then generate the salt value
+//         const saltValue = await bcrypt.genSalt(8)
+//         console.log(`I am the salt value: ${saltValue}`)
+//         // now we are hashing our salt value by passing password and saltValue as a promise 
+//         const hashedValue = await bcrypt.hash(password, saltValue)
+//         console.log(`I am the hashed value: `, hashedValue)
+//     } catch (error) {
+//         console.log(error)
+//     }
+// }
 // callling the hashedPassword function to show in our terminal/console
-hashedPassword('password');
+// hashedPassword('password');
 
 // using bcrpyt.compare we will tell if two values are one and the same
 userRouter.post("/login", async (req,res, next) => {
@@ -84,9 +81,9 @@ userRouter.post("/login", async (req,res, next) => {
     const validity = await bcrypt.compare(password, hashedpassword)
     // console.log(validity)
     if(user && validity){
-        console.log("did that")
+        // console.log("did that")
         const token = jwt.sign({id: user.id, username: user.username}, process.env.JWT_SECRET, {expiresIn: "1w"})
-        console.log("token")
+        // console.log("token")
         res.send({message: `thank you for logging in ${username}`, token: token})
 
     }else{
@@ -94,7 +91,7 @@ userRouter.post("/login", async (req,res, next) => {
         message: "Invalid Username or password"})
     }
     }catch(error){
-        console.log(error)
+        // console.log(error)
         next(error)
     }
 })
