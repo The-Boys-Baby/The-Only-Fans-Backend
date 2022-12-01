@@ -35,7 +35,7 @@ async function getActiveOrders(){
     }
 }
 async function getActiveOrdersByCustomerId({id}){
-        // console.log(id)
+        console.log(id)
     try {
         const { rows: [activeOrder] } = await client.query(`
         SELECT * FROM "order"
