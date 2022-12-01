@@ -4,7 +4,7 @@ const orderRouter = express.Router()
 
 //getting a cart
 
-//orderid -> orderItems -> orderItemPrice -> OrderItem Quantity 
+//orderid -> orderitems -> orderItemPrice -> OrderItem Quantity 
 
 
 orderRouter.get("/", async (req,res,next) => {

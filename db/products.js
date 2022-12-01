@@ -1,4 +1,3 @@
-const productRouter = require("../api/products")
 const client = require("./seed")
 
 async function getAllProducts(){
