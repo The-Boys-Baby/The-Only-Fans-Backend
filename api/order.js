@@ -1,16 +1,22 @@
-const {getAllOrders,getActiveOrders,getActiveOrdersById,getAllOrdersById,getOrderByOrderId,addToOrder} = require("../db/order")
-const express = require("express")
-const orderRouter = express.Router()
+// const {getAllOrders,getActiveOrders,getActiveOrdersById,getAllOrdersById,getOrderByOrderId,addToOrder, getActiveOrdersByCustomerId} = require("../db/order")
+// const { getOrderByOrderNumber,attachObjectsToOrder } = require("../db/orderitem")
+// const express = require("express")
+// const userRouter = require("./users")
+// const orderRouter = express.Router()
 
-//getting a cart
+// //getting a cart
 
-//orderid -> orderItems -> orderItemPrice -> OrderItem Quantity 
+// //orderid -> orderItems -> orderItemPrice -> OrderItem Quantity 
 
 
-orderRouter.get("/", async (req,res,next) => {
-    try {
+// orderRouter.get("/me", async (req,res,next) => {
+//          const id = req.user.id
+//     try {
         
-    } catch (error) {
-        console.log(error)
-    }
-})
+//         const totalorder = attachObjectsToOrder(id)
+        
+//         res.send(totalorder)
+//     } catch (error) {
+//         console.log(error)
+//     }
+// })

@@ -32,14 +32,14 @@ productRouter.get("/:productId", async (req,res,next) => {
 })
 productRouter.post("/:productId", async (req, res,next)=> {
     const userId = req.user.id
-    console.log("this is kenny:", userId)
+    // console.log("this is kenny:", userId)
     const productId = req.params.productId
-    console.log("this is mike:", productId)
+    // console.log("this is mike:", productId)
     const { quantity } = req.body
-    console.log("This is Dale:", quantity)
+    // console.log("This is Dale:", quantity)
     try {
         const userOrder = await getActiveOrdersByCustomerId({id: userId})
-        console.log("this is use order:", userOrder.id)
+        // console.log("this is use order:", userOrder.id)
         if(userOrder.id){
             await createOrderItem({orderId: userOrder.id, productId: productId, quantity})
         }
