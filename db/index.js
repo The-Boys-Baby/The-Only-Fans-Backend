@@ -77,7 +77,7 @@ async function createUsersForData(){
         username: "Kenny"
         , password: "Benny"
         , firstname: "Keenny"
-        , lastname: "myGirlfriendGotUpperCutByASpecialNeedsKenderGartner"
+        , lastname: "LovesHisGirlfriend"
         , email: "Kenny@email.com"
     })
 }
