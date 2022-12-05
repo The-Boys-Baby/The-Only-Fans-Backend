@@ -1,3 +1,4 @@
+
 const client = require("./seed")
 
 async function getAllProducts(){
