@@ -44,4 +44,7 @@ router.use("/products", productRouter)
 const userRouter = require("./users")
 router.use("/users", userRouter)
 
+const checkoutRouter = require("./checkout")
+router.use("/checkout", checkoutRouter)
+
 module.exports = router
