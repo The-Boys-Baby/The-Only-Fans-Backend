@@ -8,13 +8,10 @@
 
 // //orderid -> orderItems -> orderItemPrice -> OrderItem Quantity 
 
-
 // orderRouter.get("/me", async (req,res,next) => {
 //          const id = req.user.id
-//     try {
-        
+//     try {    
 //         const totalorder = attachObjectsToOrder(id)
-        
 //         res.send(totalorder)
 //     } catch (error) {
 //         console.log(error)
