@@ -92,4 +92,4 @@ async function updateOrderTotal({orderId}){
 
 
 
-module.exports = {getAllOrders,getActiveOrders,getActiveOrdersByCustomerId,getAllOrdersByCustomerId,getOrderByOrderId,createOrder}
+module.exports = {getAllOrders,getActiveOrders,getActiveOrdersByCustomerId,getAllOrdersByCustomerId,getOrderByOrderId,createOrder, updateOrderTotal}
