@@ -71,18 +71,18 @@ userRouter.post("/register", async (req, res, next) => {
 userRouter.post("/login", async (req,res, next) => {
     const {username,password} = req.body 
    
-    if (!username, !password){
+    if (!username || !password){
         res.send({  name: "MissingCredentials",
                 message: "Please put in username and password"})
     }
 
     try{
     const user = await getUserByUsername(username)
-    // console.log(user)
+    console.log(user)
     const hashedpassword = user.password
-    // console.log(hashedpassword)
     const validity = await bcrypt.compare(password, hashedpassword)
-    // console.log(validity)
+    console.log(password)
+    console.log(validity)
     if(user && validity){
         // console.log("did that")
         const token = jwt.sign({id: user.id, username: user.username}, process.env.JWT_SECRET, {expiresIn: "1w"})
@@ -90,7 +90,7 @@ userRouter.post("/login", async (req,res, next) => {
         res.send({message: `thank you for logging in ${username}`, token: token})
 
     }else{
-        res.send({name: "INVALIDUSERCREDENTIALS", 
+        res.send({name: "FUCKYOUASSHOLE", 
         message: "Invalid Username or password"})
     }
     }catch(error){
