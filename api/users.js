@@ -13,12 +13,13 @@ const router = require(".")
 userRouter.post("/register", async (req, res, next) => {
     
     const {username, password, firstname, lastname, email} = req.body
-    // console.log(username)
+    console.log(username)
     try {
         const checkuser = await getUserByUsername(username)
 
         if (checkuser) {
             res.send({
+                status: "Unsuccessful",
                 name: "userExists",
                 message: "Username already exists, please input another username"
             });
@@ -33,16 +34,18 @@ userRouter.post("/register", async (req, res, next) => {
 
         const token = jwt.sign({id: user.id, username: user.username}, process.env.JWT_SECRET, {expiresIn: "1w"})
         // console.log(token)
-        // console.log(user.id)
+        console.log(user.id)
         await createOrder(user.id)
         res.send({
             user,
+            status: "Successful",
             message: `Successfully created Username and password thank you for signing up ${username}`,
             token
         });
 
-    } catch ({name, message}) {
-        next({name, message})
+    } catch (error) {
+        console.log(error)
+        next()
     }
 
 

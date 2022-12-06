@@ -7,10 +7,11 @@ async function createUser({username, password, firstname, lastname, email}){
         const { rows: [user] } =  await client.query(`
         INSERT INTO USERS(username, password, firstname, lastname, email)
         VALUES ($1, $2, $3, $4, $5)
-        RETURNING id, username;
+        RETURNING *;
         `, [username, hashedpassword,firstname,lastname,email]
         )
         // console.log(user)
+        delete user.password
         return user
     } catch (error) {
         console.log(error)
@@ -20,11 +21,12 @@ async function createUser({username, password, firstname, lastname, email}){
 async function getUserById(id){
     try {
         const {rows: [user]} = await client.query(`
-        SELECT id, username
+        SELECT *
         FROM users
         WHERE "id" = $1;`
         ,[id])
         // console.log(user)
+        delete user.password
         return user
     } catch (error) {
         console.log(error)
@@ -44,7 +46,7 @@ async function getAllUsers(){
 async function getUserByUsername(username){
     try {
         const {rows: [user]} = await client.query(`
-        SELECT id, username, password
+        SELECT *
         FROM users
         WHERE "username" = $1;`,[username])
         return user
