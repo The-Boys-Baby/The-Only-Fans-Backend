@@ -5,6 +5,7 @@ const {getUserById, getAllUsers} = require("../db/users")
 const { createProduct } = require("../db/index")
 
 async function requireAdmin(req, res, next){
+    console.log(req.user)
         const checkAdmin = await isAdmin(req.user.id)
         if(checkAdmin.isadmin === true){
             next()
@@ -13,7 +14,7 @@ async function requireAdmin(req, res, next){
         }
 }
 
-adminRouter.post("/getUsers", requireAdmin, async (req,res,next) => {
+adminRouter.get("/getUsers", requireAdmin, async (req,res,next) => {
     try {
         const allUsers = await getAllUsers()
         if(!!allUsers){
