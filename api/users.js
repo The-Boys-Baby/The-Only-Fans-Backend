@@ -18,7 +18,7 @@ userRouter.post("/register", async (req, res, next) => {
         const checkuser = await getUserByUsername(username)
 
         if (checkuser) {
-            next({
+            res.send({
                 name: "userExists",
                 message: "Username already exists, please input another username"
             });
@@ -32,6 +32,7 @@ userRouter.post("/register", async (req, res, next) => {
         });
 
         const token = jwt.sign({id: user.id, username: user.username}, process.env.JWT_SECRET, {expiresIn: "1w"})
+        // console.log(token)
         // console.log(user.id)
         await createOrder(user.id)
         res.send({
