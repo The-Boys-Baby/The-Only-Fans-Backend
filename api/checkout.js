@@ -1,5 +1,5 @@
 const {getAllOrders,getActiveOrders,getActiveOrdersById,getAllOrdersById,getOrderByOrderId,addToOrder,updateOrderTotal} = require("../db/order")
-const { attachObjectsToOrder } = require("../db/orderitem")
+const { attachObjectsToOrder,removeOrderItem } = require("../db/orderitem")
 const express = require("express")
 const checkoutRouter = express.Router()
 
@@ -19,5 +19,13 @@ try {
    console.log(error)
    next(error)
 }
+})
+checkoutRouter.delete("/:orderitem", async (req, res, next) => {
+   const id = req.user.id
+   try{
+      
+   }catch(error){
+      console.log(error)
+   }
 })
 module.exports = checkoutRouter

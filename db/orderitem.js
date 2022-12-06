@@ -29,6 +29,17 @@ async function getOrderItemsByOrderNumber({id}){
         console.log(error)
     }
 }
+async function removeOrderItem({productid, orderId}){
+    try {
+        const {rows} = await client.query(`
+        DELETE FROM orderitem
+        WHERE "productid" = $1 AND orderID = $2
+        RETURNING *;`,[productid, orderId])
+        return rows
+    } catch (error) {
+        console.log(error)
+    }
+}
 
 
 async function attachObjectsToOrder(id){
@@ -47,4 +58,4 @@ async function attachObjectsToOrder(id){
     }
 }
 
-module.exports = { createOrderItem, getOrderItemsByOrderNumber, attachObjectsToOrder,attachObjectsToOrder }
+module.exports = { createOrderItem, getOrderItemsByOrderNumber, attachObjectsToOrder,attachObjectsToOrder,removeOrderItem  }
