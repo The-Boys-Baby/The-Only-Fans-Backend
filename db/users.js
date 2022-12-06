@@ -30,6 +30,16 @@ async function getUserById(id){
         console.log(error)
     }
 }
+async function getAllUsers(){
+    try {
+        const {rows} = await client.query(`
+        SELECT id, username, firstname, email, isadmin 
+        FROM users;`)
+        return rows
+    } catch (error) {
+        console.log(error)
+    }
+}
 
 async function getUserByUsername(username){
     try {
@@ -90,4 +100,4 @@ async function updateUser(id, fields ={} ) {
 
     
 
-module.exports = {createUser, getUserById,getUserByUsername, updateUser,deleteUser}
+module.exports = {createUser, getUserById,getUserByUsername, updateUser,deleteUser, getAllUsers}

@@ -1,7 +1,8 @@
 const express = require("express")
 const adminRouter = express.Router()
 const {isAdmin,promoteAdmin} = require("../db/admin")
-const {getUserById} = require("../db/users")
+const {getUserById, getAllUsers} = require("../db/users")
+const { createProduct } = require("../db/index")
 
 async function requireAdmin(req, res, next){
         const checkAdmin = await isAdmin(req.user.id)
@@ -12,10 +13,14 @@ async function requireAdmin(req, res, next){
         }
 }
 
-adminRouter.post("/", requireAdmin, async (req,res,next) => {
+adminRouter.post("/getUsers", requireAdmin, async (req,res,next) => {
     try {
-        
-        res.send({name: "cheese"})
+        const allUsers = await getAllUsers()
+        if(!!allUsers){
+            res.send({name: "FetchingAllUsers", message: "Successfully Caight users", status: "successful", users: allUsers})
+        }else{
+            res.send({name: "FetchProblem", message: "Problem with fetching users"})
+        }
     } catch (error) {
         console.log(error)
     }
@@ -37,11 +42,11 @@ adminRouter.post("/:user", requireAdmin, async (req, res, next) => {
 })
 
 
-adminRouter.post("/newItem", requireAdmin, async (req, res, next) => {
+adminRouter.post("/createProduct", requireAdmin, async (req, res, next) => {
     try {
-        
+        const createdItem = await createProduct({})
+        console.log(createdItem)
 
-        res.send
     } catch (error) {
         
     }
