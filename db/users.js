@@ -1,4 +1,4 @@
-const client = require("./seed")
+const client = require("./client")
 const bcrypt = require('bcrypt')
 
 async function createUser({username, password, firstname, lastname, email}){

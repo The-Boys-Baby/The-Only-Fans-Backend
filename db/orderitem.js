@@ -1,6 +1,6 @@
-const client = require("./seed")
-const { getActiveOrdersByCustomerId} = require("./order")
-const { getProductById } = require("./products")
+
+const { client,getActiveOrdersByCustomerId, getProductById } = require("./index")
+
 
 
 async function createOrderItem({orderId,productId,quantity}){
@@ -18,7 +18,7 @@ async function createOrderItem({orderId,productId,quantity}){
     }
 }
 
-async function getOrderByOrderNumber({id}){
+async function getOrderItemsByOrderNumber({id}){
     try {
         const { rows } = await client.query(`
         SELECT * FROM orderitem
@@ -30,11 +30,12 @@ async function getOrderByOrderNumber({id}){
     }
 }
 
+
 async function attachObjectsToOrder(id){
     try{
         const customerOrder = await getActiveOrdersByCustomerId({id:id})
         // console.log(customerOrder.id)
-        customerOrder.items = await getOrderByOrderNumber({id: customerOrder.id})
+        customerOrder.items = await getOrderItemsByOrderNumber({id: customerOrder.id})
         if (customerOrder.items){
             return customerOrder
         }else{
@@ -46,4 +47,4 @@ async function attachObjectsToOrder(id){
     }
 }
 
-module.exports = { createOrderItem, getOrderByOrderNumber, attachObjectsToOrder,attachObjectsToOrder }
+module.exports = { createOrderItem, getOrderItemsByOrderNumber, attachObjectsToOrder,attachObjectsToOrder }

@@ -1,5 +1,5 @@
 
-const client = require("./seed")
+const client = require("./client")
 
 async function getAllProducts(){
     try {
