@@ -47,4 +47,7 @@ router.use("/users", userRouter)
 const checkoutRouter = require("./checkout")
 router.use("/checkout", checkoutRouter)
 
+const adminRouter = require("./admin")
+router.use("/admin", adminRouter)
+
 module.exports = router

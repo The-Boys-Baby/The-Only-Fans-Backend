@@ -1,4 +1,4 @@
-const client = require("./seed")
+const client = require("./client")
 const bcrypt = require('bcrypt')
 
 async function createUser({username, password, firstname, lastname, email}){
@@ -26,6 +26,16 @@ async function getUserById(id){
         ,[id])
         // console.log(user)
         return user
+    } catch (error) {
+        console.log(error)
+    }
+}
+async function getAllUsers(){
+    try {
+        const {rows} = await client.query(`
+        SELECT id, username, firstname, email, isadmin 
+        FROM users;`)
+        return rows
     } catch (error) {
         console.log(error)
     }
@@ -90,4 +100,4 @@ async function updateUser(id, fields ={} ) {
 
     
 
-module.exports = {createUser, getUserById,getUserByUsername, updateUser,deleteUser}
+module.exports = {createUser, getUserById,getUserByUsername, updateUser,deleteUser, getAllUsers}

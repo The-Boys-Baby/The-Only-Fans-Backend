@@ -9,8 +9,9 @@ productRouter.get("/", async (req,res,next) => {
 
         const allproducts = await getAllProducts()
         res.send(allproducts)
-    } catch ({name, message}) {
-        next({name, message})
+    } catch (error) {
+        console.log(error)
+        next(error)
     }
 })
 
@@ -30,22 +31,32 @@ productRouter.get("/:productId", async (req,res,next) => {
            next(error)
     }
 })
+
 productRouter.post("/:productId", async (req, res,next)=> {
     const userId = req.user.id
     // console.log("this is kenny:", userId)
     const productId = req.params.productId
     // console.log("this is mike:", productId)
     const { quantity } = req.body
+
+    if ( quantity > 100 || quantity < 1){
+        res.status(400).send({name: "BadQuantityu", message: "Stop changing the quantity"})
+    }
     // console.log("This is Dale:", quantity)
     try {
         const userOrder = await getActiveOrdersByCustomerId({id: userId})
-        // console.log("this is use order:", userOrder.id)
-        if(userOrder.id){
-            await createOrderItem({orderId: userOrder.id, productId: productId, quantity})
+        const getOrder = await getProductById(productId)
+        if(userOrder.id && !!getOrder){
+            const createdItem = await createOrderItem({orderId: userOrder.id, productId: productId, quantity})
+            const setPrice = await updateOrderTotal({orderId})
+            res.send({name: "successfullyAdded", message: "successfully added item to cart", status: "success"})
+        }else{
+            res.send({name: "FailedSubmit", message: "Failed to add item", status: "failed"})
         }
-        next()
+        
     } catch (error) {
-        console.log(error)
+       console.log(error)
+       next(error)
     }
 })
 
@@ -57,13 +68,14 @@ productRouter.post("/", async (req, res, next)=>{
         if (post){
             res.send(post)
         } else {
-            next({
+            res.send({
                 name: "CreatePostError",
                 message: "Creating a post error has occurred"
             })
         }
     } catch (error) {
         console.log(error)
+        next(error)
     }
 }) 
 
@@ -87,13 +99,14 @@ productRouter.post("/:post", async (req, res, next)=>{
         if (post){
             res.send(post)
         } else {
-            next({
-                name: "CreatePostError",
+            res.send({
+                name: "UpdatePostError",
                 message: "Creating a post error has occurred"
             })
         }
     } catch (error) {
         console.log(error)
+        next(error)
     }
 }) 
 
@@ -102,8 +115,8 @@ productRouter.post("/:post/inactive", async (req, res, next) => {
 
  try {
     const post = await deleteProduct(id)
-    console.log(id)
-    console.log(post)
+    // console.log(id)
+    // console.log(post)
     if(post == true){
         res.send(post)
     }else{
@@ -114,6 +127,7 @@ productRouter.post("/:post/inactive", async (req, res, next) => {
     }
  } catch (error) {
     console.log(error)
+    next(error)
  }
 })
 

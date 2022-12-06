@@ -12,11 +12,11 @@ checkoutRouter.get("/me", async (req,res,next) => {
     const id = req.user.id
     console.log(id)
 try {
-   
    const totalorder = await attachObjectsToOrder(id)
    res.send(totalorder)
 } catch (error) {
    console.log(error)
+   next(error)
 }
 })
 module.exports = checkoutRouter

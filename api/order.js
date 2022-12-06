@@ -1,5 +1,5 @@
 // const {getAllOrders,getActiveOrders,getActiveOrdersById,getAllOrdersById,getOrderByOrderId,addToOrder, getActiveOrdersByCustomerId} = require("../db/order")
-// const { getOrderByOrderNumber,attachObjectsToOrder } = require("../db/orderitem")
+// const { getOrderItemsByOrderNumber,attachObjectsToOrder } = require("../db/orderitem")
 // const express = require("express")
 // const userRouter = require("./users")
 // const orderRouter = express.Router()

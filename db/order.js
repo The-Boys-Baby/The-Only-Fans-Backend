@@ -1,5 +1,6 @@
 
-const  client = require("./seed")
+const  client = require("./client")
+const {getOrderItemsByOrderNumber} = require("./orderitem")
 
 async function createOrder(customerid, active = false){
     try {
@@ -68,7 +69,26 @@ async function getOrderByOrderId(id){
         console.log(error)
     }
 }
-
+// Update order total amount
+//step 1: get order itmes by order number
+//step 2: loop through each order item and set a variable to added price times the quantity = total price
+//setp 3: update our order and the total price will be caluculated from loop
+async function updateOrderTotal({orderId}){
+    try {
+        const orderItems = await getOrderItemsByOrderNumber({id: orderId})
+        let totalprice = 0;
+        orderItems.forEach((el) => { 
+            const subtotal = el.orderprice * el.quantity
+            totalprice += subtotal
+        })
+        const {rows} = await client.query(`
+        UPDATE order
+        SET totalamount = ${totalprice}
+        WHERE "id" = $1;`, [orderId])
+    } catch (error) {
+        
+    }
+}
 
 
 
