@@ -13,7 +13,7 @@ async function requireAdmin(req, res, next){
         }
 }
 
-adminRouter.post("/getUsers", requireAdmin, async (req,res,next) => {
+adminRouter.get("/getUsers", requireAdmin, async (req,res,next) => {
     try {
         const allUsers = await getAllUsers()
         if(!!allUsers){
