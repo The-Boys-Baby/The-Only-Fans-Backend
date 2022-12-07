@@ -6,14 +6,16 @@
 
 // //getting a cart
 
-// //orderid -> orderItems -> orderItemPrice -> OrderItem Quantity 
+// //orderid -> orderItems -> orderItemPrice -> OrderItem Quantity
 
 // orderRouter.get("/me", async (req,res,next) => {
 //          const id = req.user.id
-//     try {    
+//     try {
 //         const totalorder = attachObjectsToOrder(id)
 //         res.send(totalorder)
 //     } catch (error) {
 //         console.log(error)
 //     }
 // })
+
+// jeremy: still want to have order for a profile check of previous orders, order history.

@@ -6,8 +6,9 @@ const { createOrder } = require("../db/order");
 const bcrypt = require("bcrypt");
 //importing jwt
 const jwt = require("jsonwebtoken");
-const { application } = require("express");
+const { application } = require("express"); // jeremy: guessing that you don't need or want this, and might break things
 const router = require(".");
+// jeremy: import db functions from db/index.js
 
 userRouter.post("/register", async (req, res, next) => {
   const { username, password, firstname, lastname, email } = req.body;
@@ -22,6 +23,7 @@ userRouter.post("/register", async (req, res, next) => {
         message: "Username already exists, please input another username",
       });
     }
+    // jeremy: can create user = { ...req.body }, then... const createdUser = await createUser(user)
     const user = await createUser({
       username,
       password,
@@ -37,6 +39,7 @@ userRouter.post("/register", async (req, res, next) => {
     );
     // console.log(token)
     // console.log(user.id);
+    // jeremy: if user... else...
     await createOrder(user.id);
     res.send({
       user,
@@ -46,6 +49,7 @@ userRouter.post("/register", async (req, res, next) => {
     });
   } catch (error) {
     console.log(error);
+    // jeremy: res.status(status).send(response)
     next();
   }
 });
@@ -67,30 +71,40 @@ userRouter.post("/register", async (req, res, next) => {
 // hashedPassword('password');
 
 // using bcrpyt.compare we will tell if two values are one and the same
-userRouter.post("/login", async (req,res, next) => {
-    const {username,password} = req.body 
-   
-    if (!username || !password){
-        res.send({  name: "MissingCredentials",
-                message: "Please put in username and password"})
-    }
+userRouter.post("/login", async (req, res, next) => {
+  const { username, password } = req.body;
 
-    try{
-    const user = await getUserByUsername(username)
-    console.log(user)
-    const hashedpassword = user.password
-    const validity = await bcrypt.compare(password, hashedpassword)
-    console.log(password)
-    console.log(validity)
-    if(user && validity){
-        // console.log("did that")
-        const token = jwt.sign({id: user.id, username: user.username}, process.env.JWT_SECRET, {expiresIn: "1w"})
-        // console.log("token")
-        res.send({message: `thank you for logging in ${username}`, token: token})
+  if (!username || !password) {
+    res.send({
+      name: "MissingCredentials",
+      message: "Please put in username and password",
+    });
+  }
 
-    }else{
-        res.send({name: "FUCKYOUASSHOLE", 
-        message: "Invalid Username or password"})
+  try {
+    const user = await getUserByUsername(username);
+    console.log(user);
+    const hashedpassword = user.password;
+    const validity = await bcrypt.compare(password, hashedpassword);
+    console.log(password);
+    console.log(validity); // jeremy: get rid of old console logs
+    if (user && validity) {
+      // console.log("did that")
+      const token = jwt.sign(
+        { id: user.id, username: user.username },
+        process.env.JWT_SECRET,
+        { expiresIn: "1w" }
+      );
+      // console.log("token")
+      res.send({
+        message: `thank you for logging in ${username}`,
+        token: token,
+      });
+    } else {
+      res.send({
+        name: "FUCKYOUASSHOLE",
+        message: "Invalid Username or password",
+      });
     }
   } catch (error) {
     // console.log(error)
@@ -101,7 +115,7 @@ userRouter.post("/me", async (req, res, next) => {
   const token = req.body.token;
   try {
     if (!token) {
-      res.send({ message: "Eat it bitch" });
+      res.send({ message: "Eat it bitch" }); // jeremy: maybe less NSFW lol
     } else {
       const verifiedInfo = jwt.verify(token, process.env.JWT_SECRET);
       const user = await getUserByUsername(verifiedInfo.username);
