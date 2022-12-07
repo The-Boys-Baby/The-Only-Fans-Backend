@@ -67,42 +67,30 @@ userRouter.post("/register", async (req, res, next) => {
 // hashedPassword('password');
 
 // using bcrpyt.compare we will tell if two values are one and the same
-userRouter.post("/login", async (req, res, next) => {
-  const { username, password } = req.body;
+userRouter.post("/login", async (req,res, next) => {
+    const {username,password} = req.body 
+   
+    if (!username || !password){
+        res.send({  name: "MissingCredentials",
+                message: "Please put in username and password"})
+    }
 
-  if (!username || !password) {
-    res.send({
-      name: "MissingCredentials",
-      message: "Please put in username and password",
-    });
-  }
+    try{
+    const user = await getUserByUsername(username)
+    console.log(user)
+    const hashedpassword = user.password
+    const validity = await bcrypt.compare(password, hashedpassword)
+    console.log(password)
+    console.log(validity)
+    if(user && validity){
+        // console.log("did that")
+        const token = jwt.sign({id: user.id, username: user.username}, process.env.JWT_SECRET, {expiresIn: "1w"})
+        // console.log("token")
+        res.send({message: `thank you for logging in ${username}`, token: token})
 
-  try {
-    const user = await getUserByUsername(username);
-    // console.log(user)
-    const hashedpassword = user.password;
-    // console.log(hashedpassword)
-    const validity = await bcrypt.compare(password, hashedpassword);
-    // console.log(validity)
-    if (user && validity) {
-      // console.log("did that")
-      const token = jwt.sign(
-        { id: user.id, username: user.username },
-        process.env.JWT_SECRET,
-        { expiresIn: "1w" }
-      );
-      // console.log("token")
-      delete user.password;
-      res.send({
-        message: `thank you for logging in ${username}`,
-        token,
-        user,
-      });
-    } else {
-      res.send({
-        name: "INVALIDUSERCREDENTIALS",
-        message: "Invalid Username or password",
-      });
+    }else{
+        res.send({name: "FUCKYOUASSHOLE", 
+        message: "Invalid Username or password"})
     }
   } catch (error) {
     // console.log(error)
