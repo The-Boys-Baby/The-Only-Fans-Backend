@@ -82,12 +82,15 @@ userRouter.post("/login", async (req,res, next) => {
     const validity = await bcrypt.compare(password, hashedpassword)
     console.log(password)
     console.log(validity)
+    delete user.password
+    delete user.firstname
+    delete user.lastname
     if(user && validity){
         // console.log("did that")
         const token = jwt.sign({id: user.id, username: user.username}, process.env.JWT_SECRET, {expiresIn: "1w"})
         // console.log("token")
-        res.send({message: `thank you for logging in ${username}`, token: token})
-
+        res.send({message: `thank you for logging in ${username}`, token: token, user: user})
+        
     }else{
         res.send({name: "FUCKYOUASSHOLE", 
         message: "Invalid Username or password"})
