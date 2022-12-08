@@ -3,6 +3,8 @@ const express = require("express")
 const morgan = require("morgan")
 const apiRouter = require("./api")
 const cors = require('cors')
+const PORT = process.env.PORT || 1337
+
 
 
 const app = express();
@@ -19,9 +21,6 @@ app.use((req, res, next)=> {
     console.log(req.body)
     next()
 })
-
-
-const port = 1337
 
 app.listen(port, () => {
     console.log(`now running on ${port}`)
