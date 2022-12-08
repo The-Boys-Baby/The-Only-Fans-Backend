@@ -22,8 +22,8 @@ app.use((req, res, next)=> {
     next()
 })
 
-app.listen(port, () => {
-    console.log(`now running on ${port}`)
+app.listen(PORT, () => {
+    console.log(`now running on ${PORT}`)
 })
 
 app.use("/api", apiRouter)
