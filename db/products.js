@@ -1,4 +1,3 @@
-
 const client = require("./client")
 
 async function getAllProducts(){

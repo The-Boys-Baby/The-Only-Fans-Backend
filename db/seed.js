@@ -34,7 +34,7 @@ async function createTables(){
         CREATE TABLE product(
         id SERIAL PRIMARY KEY,
         name VARCHAR(255) UNIQUE NOT NULL,
-        price INTEGER NOT NULL,
+        price FLOAT NOT NULL,
         description VARCHAR(500) NOT NULL,
         isActive BOOLEAN DEFAULT(TRUE),
         pictures TEXT UNIQUE NOT NULL
@@ -43,7 +43,7 @@ async function createTables(){
         CREATE TABLE "order"(
         id SERIAL PRIMARY KEY,
         customerid INTEGER REFERENCES users(id),
-        totalamount MONEY NOT NULL DEFAULT(0),
+        totalamount FLOAT NOT NULL DEFAULT(0),
         Orderstatus BOOLEAN DEFAULT(false)
         );
 
@@ -51,7 +51,7 @@ async function createTables(){
         id SERIAL PRIMARY KEY,
         orderid INTEGER REFERENCES "order"(id),
         productid INTEGER REFERENCES product(id),
-        orderprice MONEY DEFAULT(0),
+        orderprice FLOAT DEFAULT(0),
         quantity INTEGER NOT NULL
         );
         `)
@@ -85,7 +85,7 @@ async function createUsersForData(){
 async function createTestProducts (){
     await createProduct({
         name: "Power Breezer Mach 4",
-        price: 6000,
+        price: 6000.99,
         description: "Mach 4 fan link",
         filePath: "https://images-ext-2.discordapp.net/external/cX-sXQdCZEkO2fe-pX3B6skLotqBQUIZUdvqUnLVzow/https/www.powerbreezer.com/wp-content/uploads/2021/07/mach-4-left.webp"})
     await createProduct({

@@ -1,7 +1,7 @@
-const client = require("./client")
+// const client = require("./client")
 module.exports = {
     ...require("./admin"),
-    client,
+    // client,
     ...require("./order"),
     ...require("./orderitem"),
     ...require("./users"),

@@ -2,7 +2,8 @@ const express = require("express")
 const productRouter = express.Router()
 const { getAllProducts, createProduct, updateProduct,getProductById } = require("../db/products")
 const {createOrderItem} = require("../db/orderitem")
-const {getActiveOrdersByCustomerId}= require("../db/order")
+const { getActiveOrdersByCustomerId, updateOrderTotal }= require("../db/order")
+
 
 productRouter.get("/", async (req,res,next) => {
     try {
@@ -48,8 +49,9 @@ productRouter.post("/:productId", async (req, res,next)=> {
         const getOrder = await getProductById(productId)
         if(userOrder.id && !!getOrder){
             const createdItem = await createOrderItem({orderId: userOrder.id, productId: productId, quantity})
-            const setPrice = await updateOrderTotal({orderId})
-            res.send({name: "successfullyAdded", message: "successfully added item to cart", status: "success"})
+            const updatedOrder = await updateOrderTotal({orderId:userOrder.id})
+            console.log(updatedOrder)
+            res.send({name: "successfullyAdded", message: "successfully added item to cart", status: "success", updatedOrder})
         }else{
             res.send({name: "FailedSubmit", message: "Failed to add item", status: "failed"})
         }

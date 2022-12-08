@@ -1,6 +1,4 @@
-
-const  client = require("./client")
-const {getOrderItemsByOrderNumber} = require("./orderitem")
+const client = require("./client")
 
 async function createOrder(customerid, active = false){
     try {
@@ -76,20 +74,44 @@ async function getOrderByOrderId(id){
 async function updateOrderTotal({orderId}){
     try {
         const orderItems = await getOrderItemsByOrderNumber({id: orderId})
+        
         let totalprice = 0;
         orderItems.forEach((el) => { 
-            const subtotal = el.orderprice * el.quantity
+            console.log("this is it boys", typeof el.orderprice)
+            if (typeof el.orderprice == "String") {
+                let orderPrice = el.orderprice.slice(1)
+            let test = Number.parseFloat("21.21")
+            console.log("Your mom", test, typeof test)
+            orderPrice = parseFloat(orderPrice.split(",").join("")).toFixed(2)
+            const subtotal = orderPrice * el.quantity
             totalprice += subtotal
+            } else {
+                const subtotal = el.orderprice * el.quantity
+                totalprice += subtotal
+            }
         })
-        const {rows} = await client.query(`
-        UPDATE order
-        SET totalamount = ${totalprice}
-        WHERE "id" = $1;`, [orderId])
+        console.log("Total Price: ", totalprice)
+        const {rows:[updatedOrder]} = await client.query(`
+        UPDATE "order"
+        SET totalamount = $1
+        WHERE "id" = $2
+        RETURNING *;`, [totalprice, orderId])
+        return updatedOrder
     } catch (error) {
-        
+        console.log(error)
+    }
+}
+async function getOrderItemsByOrderNumber({id}){
+    try {
+        const { rows } = await client.query(`
+        SELECT * FROM orderitem
+        WHERE "orderid" = $1`, [id])
+        // console.log(rows)
+        return rows
+    } catch (error) {
+        console.log(error)
     }
 }
 
 
-
-module.exports = {getAllOrders,getActiveOrders,getActiveOrdersByCustomerId,getAllOrdersByCustomerId,getOrderByOrderId,createOrder, updateOrderTotal}
+module.exports = {getAllOrders, getOrderItemsByOrderNumber, getActiveOrders,getActiveOrdersByCustomerId,getAllOrdersByCustomerId,getOrderByOrderId,createOrder, updateOrderTotal}
