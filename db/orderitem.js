@@ -25,7 +25,6 @@ async function createOrderItem({ orderId, productId, quantity }) {
 
 async function removeOrderItem({ productid, orderId }) {
   try {
-    console.log("productid:", productid, "orderid", orderId);
     const row = await client.query(
       `
         DELETE FROM orderitem
@@ -34,6 +33,23 @@ async function removeOrderItem({ productid, orderId }) {
     );
     console.log(row);
     return row;
+  } catch (error) {
+    console.log(error);
+  }
+}
+async function updateQuantity({ productid, orderId, Quantity }) {
+  try {
+    console.log("quantity:", Quantity);
+    const { rowCount } = await client.query(
+      `
+  UPDATE orderitem
+  SET "quantity" = $1
+  WHERE "id" = $2 AND "orderid" = $3
+  RETURNING *;`,
+      [Quantity, productid, orderId]
+    );
+    console.log(!!rowCount);
+    return rowCount;
   } catch (error) {
     console.log(error);
   }
@@ -62,4 +78,5 @@ module.exports = {
   attachObjectsToOrder,
   attachObjectsToOrder,
   removeOrderItem,
+  updateQuantity,
 };
