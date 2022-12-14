@@ -1,9 +1,19 @@
 const express = require("express")
+
 const productRouter = express.Router()
 const { getAllProducts, createProduct, updateProduct,getProductById } = require("../db/products")
 const {createOrderItem} = require("../db/orderitem")
 const { getActiveOrdersByCustomerId, updateOrderTotal }= require("../db/order")
+const {isAdmin} = require("../db/index")
 
+async function requireAdmin(req, res, next){
+        const checkAdmin = await isAdmin(req.user.id)
+        if(checkAdmin.isadmin === true){
+            next()
+        }else{
+            res.send({name: "NoAuthorization", message: "Please insert correct Credentials and try again"})
+        }
+}
 
 productRouter.get("/", async (req,res,next) => {
     try {
@@ -15,6 +25,38 @@ productRouter.get("/", async (req,res,next) => {
         next(error)
     }
 })
+
+productRouter.post("/update", requireAdmin,async (req, res, next)=>{
+    
+    const id = req.body.id
+    console.log(id)
+    const fields = {}
+    if(req.body.name){
+        fields.name = req.body.name
+    }
+    if(req.body.price){
+        fields.price = req.body.price
+    }
+    if(req.body.description){
+        fields.description = req.body.description
+    }
+
+    try {
+        const post = await updateProduct (id, fields)
+        console.log(post)
+        if (post){
+            res.send(post)
+        } else {
+            res.send({
+                name: "UpdatePostError",
+                message: "Creating a post error has occurred"
+            })
+        }
+    } catch (error) {
+        console.log(error)
+        next(error)
+    }
+}) 
 
 productRouter.get("/:productId", async (req,res,next) => {
     const params = req.params.productId
@@ -33,7 +75,7 @@ productRouter.get("/:productId", async (req,res,next) => {
     }
 })
 
-productRouter.post("/:productId", async (req, res,next)=> {
+productRouter.post("/:productId", requireAdmin ,async (req, res,next)=> {
     const userId = req.user.id
     // console.log("this is kenny:", userId)
     const productId = req.params.productId
@@ -62,55 +104,25 @@ productRouter.post("/:productId", async (req, res,next)=> {
     }
 })
 
-productRouter.post("/", async (req, res, next)=>{
-    const {name, price, description} = req.body
-    try {
-        const post = await createProduct ({name, price, description})
+// productRouter.post("/", async (req, res, next)=>{
+//     const {name, price, description, url} = req.body
+//     try {
+//         const post = await createProduct ({name, price, description, url})
 
-        if (post){
-            res.send(post)
-        } else {
-            res.send({
-                name: "CreatePostError",
-                message: "Creating a post error has occurred"
-            })
-        }
-    } catch (error) {
-        console.log(error)
-        next(error)
-    }
-}) 
+//         if (post){
+//             res.send(post)
+//         } else {
+//             res.send({
+//                 name: "CreatePostError",
+//                 message: "Creating a post error has occurred"
+//             })
+//         }
+//     } catch (error) {
+//         console.log(error)
+//         next(error)
+//     }
+// }) 
 
-productRouter.post("/:post", async (req, res, next)=>{
-    
-    const id = req.params.post
-    const fields = {}
-    if(req.body.name){
-        fields.name = req.body.name
-    }
-    if(req.body.price){
-        fields.price = req.body.price
-    }
-    if(req.body.description){
-        fields.description = req.body.description
-    }
-
-    try {
-        const post = await updateProduct (id, fields)
-
-        if (post){
-            res.send(post)
-        } else {
-            res.send({
-                name: "UpdatePostError",
-                message: "Creating a post error has occurred"
-            })
-        }
-    } catch (error) {
-        console.log(error)
-        next(error)
-    }
-}) 
 
 productRouter.post("/:post/inactive", async (req, res, next) => {
  const id = req.params.post

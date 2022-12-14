@@ -5,7 +5,6 @@ const {getUserById, getAllUsers} = require("../db/users")
 const { createProduct } = require("../db/index")
 
 async function requireAdmin(req, res, next){
-    console.log(req.user)
         const checkAdmin = await isAdmin(req.user.id)
         if(checkAdmin.isadmin === true){
             next()
@@ -23,12 +22,31 @@ adminRouter.get("/getUsers", requireAdmin, async (req,res,next) => {
             res.send({name: "FetchProblem", message: "Problem with fetching users"})
         }
     } catch (error) {
-        console.log(error)
+        next(error)
     }
 })
-adminRouter.post("/:user", requireAdmin, async (req, res, next) => {
+adminRouter.post("/createproduct", requireAdmin, async (req, res, next) => {
+    const {name, price, description, filePath} = req.body
+    console.log(name, price,description,filePath)
     try {
-        const id = req.params.user
+        const post = await createProduct({name, price, description, filePath})
+        console.log("this is post:", post)
+        if (post){
+            res.send(post)
+        } else {
+            res.send({
+                name: "CreatePostError",
+                message: "Creating a post error has occurred"
+            })
+        }
+    } catch (error) {
+        next(error)
+    }
+})
+adminRouter.post("/promote", requireAdmin, async (req, res, next) => {
+    try {
+        const id = req.body.id
+        console.log("this is promote id:", id)
         const checkUser = await getUserById(id)
         if(checkUser){
             await promoteAdmin(id)
@@ -36,23 +54,13 @@ adminRouter.post("/:user", requireAdmin, async (req, res, next) => {
         } else{
             res.send({name: "NoUser",message: "There is not a user with that name"})
         }
-        
+        next()
     } catch (error) {
         console.log(error)
     }
 })
 
-
-adminRouter.post("/createProduct", requireAdmin, async (req, res, next) => {
-    try {
-        const createdItem = await createProduct({})
-        console.log(createdItem)
-
-    } catch (error) {
-        
-    }
-})
-adminRouter.post("/update/:itemId", requireAdmin, async (req, res, next) => {
+adminRouter.post("/update", requireAdmin, async (req, res, next) => {
     try {
         
     } catch (error) {
