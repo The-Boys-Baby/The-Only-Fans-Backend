@@ -13,6 +13,7 @@ async function getAllProducts(){
 }
 async function createProduct({name, price, description,filePath}){
     try{
+        console.log(name,price,description,filePath)
         const {rows: [product]} = await client.query(`
         INSERT INTO product(name, price, description, pictures)
         VALUES ($1,$2,$3,$4)
@@ -83,7 +84,7 @@ async function updateProduct(id, fields = {}){
         WHERE "id" = ${id}
         RETURNING *;`,
         values)
-        // console.log(!!rowCount)
+        return {rowCount}
     } catch (error) {
         console.log(error)
     }
