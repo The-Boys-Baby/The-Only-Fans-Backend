@@ -1,4 +1,5 @@
 const client = require("./client")
+const { getUserById } = require("./users")
 
 
 
@@ -16,12 +17,15 @@ async function isAdmin(id){
 }
 async function promoteAdmin(id){
     try {
-        await client.query(`
+        const user = await getUserById(id)
+        console.log(user)
+        const returning = await client.query(`
         UPDATE users
-        SET "isadmin" = TRUE
-        WHERE "id" = $1
+        SET "isadmin" = $1
+        WHERE "id" = $2
         RETURNING *;
-        `,[id])
+        `,[!user.isadmin,id])
+        console.log(returning)
     } catch (error) {
         console.log(error)
     }
