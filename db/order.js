@@ -112,7 +112,8 @@ async function updateOrderTotal({ orderId }) {
         UPDATE "order"
         SET totalamount = $1
         WHERE "id" = $2
-        RETURNING *;`,
+        RETURNING *
+        ORDER BY "id" ASC;`,
       [totalprice, orderId]
     );
     return updatedOrder;
@@ -125,10 +126,12 @@ async function getOrderItemsByOrderNumber({ id }) {
     const { rows } = await client.query(
       `
         SELECT * FROM orderitem
-        WHERE "orderid" = $1`,
+        WHERE "orderid" = $1
+        ORDER BY "id" ASC;`,
       [id]
     );
     // console.log(rows)
+    if (rows.length == 0) return []
     return rows;
   } catch (error) {
     console.log(error);
@@ -142,7 +145,8 @@ async function changeOrderStatus({ order: id }) {
         UPDATE "order"
         SET "orderstatus" = true
         WHERE "id" = $1
-        RETURNING *;`,
+        RETURNING *
+        ;`,
       [id]
     );
     console.log("This is changeOrderStatus updatedOrder: ", updatedOrder);

@@ -66,7 +66,8 @@ checkoutRouter.post("/submit", async (req, res, next) => {
     if (activeOrderItems.length){
       if (activeOrder.id) {
           const rowsOfChangedOrders = await changeOrderStatus({ order: activeOrder.id });
-          if (rowsOfChangedOrders.id){
+          console.log("rowsOfChangedOrders", rowsOfChangedOrders)
+          if (rowsOfChangedOrders !== undefined){
             const order = await createOrder(id)
             res.send({ message: "success", order });
           } else {
@@ -94,7 +95,9 @@ checkoutRouter.delete("/:orderitem", async (req, res, next) => {
       orderId: order.id,
     });
     if (removal?.rowCount > 0) {
-      res.send({ message: "You have successfully removed the item" });
+      const totalorder = await attachObjectsToOrder(id);
+      const total = await updateOrderTotal({ id });
+      res.send({ message: "You have successfully removed the item", order: totalorder, total: total });
     }
     // console.log("this is", removal);
   } catch (error) {
@@ -109,16 +112,19 @@ checkoutRouter.post("/:orderitem", async (req, res, next) => {
   const ChangingItem = Number(req.params.orderitem);
   // console.log("This is OrderItemId", ChangingItem);
   try {
-    const order = await getActiveOrdersByCustomerId({ id: id });
+    const order = await getActiveOrdersByCustomerId({ id });
     // console.log("this is the order:", order);
     const row = await updateQuantity({
       productid: ChangingItem,
       orderId: order.id,
       Quantity: quantity,
     });
-    console.log(row);
+    // console.log(row);
     if (row > 0) {
-      res.send({ message: "Changed Order Quantity" });
+      const totalorder = await attachObjectsToOrder(id);
+      const total = await updateOrderTotal({ id });
+
+      res.send({ message: "Changed Order Quantity", order: totalorder, total: total });
     }
   } catch (error) {
     console.log(error);

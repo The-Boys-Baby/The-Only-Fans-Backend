@@ -45,7 +45,8 @@ async function updateQuantity({ productid, orderId, Quantity }) {
   UPDATE orderitem
   SET "quantity" = $1
   WHERE "id" = $2 AND "orderid" = $3
-  RETURNING *;`,
+  RETURNING *
+  ;`,
       [Quantity, productid, orderId]
     );
     console.log(!!rowCount);
@@ -62,6 +63,7 @@ async function attachObjectsToOrder(id) {
     customerOrder.items = await getOrderItemsByOrderNumber({
       id: customerOrder.id,
     });
+    console.log(customerOrder.items);
     if (customerOrder.items) {
       return customerOrder;
     } else {
